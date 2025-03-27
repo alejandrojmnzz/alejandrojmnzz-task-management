@@ -18,7 +18,6 @@ CORS(api)
 
 @api.route('/sign-up', methods=['POST'])
 def sign_up():
-    print("hi")
     body = request.json
     name = body.get("name", None)
     email = body.get("email", None)
@@ -47,7 +46,7 @@ def sign_up():
                 print(error.args)
                 return jsonify('Error'), 500
 
-@api.route('/log-in', methods=['POST'])
+@api.route('/sign-in', methods=['POST'])
 def sign_in():
     body = request.json
     email = body.get('email', None)
@@ -71,6 +70,3 @@ def sign_in():
         except Exception as error:
             print(error.args)
             return jsonify('Error'), 500
-        
-# @api.route('/tasks', methods=['POST'])
-# def add_task():
