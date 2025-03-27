@@ -70,3 +70,4 @@ def sign_in():
         except Exception as error:
             print(error.args)
             return jsonify('Error'), 500
+
