@@ -66,6 +66,7 @@ def sign_in():
             if check_password_hash(user.password, f'{password}{user.salt}'):
                 token = create_access_token(identity = str(user.id))
                 return jsonify({"token": token, "current_user": user.serialize()}), 200
+            
             else:
                 return jsonify("Incorrect credentials"), 404
         except Exception as error:

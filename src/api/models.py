@@ -22,7 +22,6 @@ class User(db.Model):
     salt: Mapped[str] = mapped_column(nullable=False)
     task: Mapped[List] = relationship(back_populates="user")
 
-
     def serialize(self):
         return {
             "id": self.id,
