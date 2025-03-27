@@ -93,3 +93,22 @@ def add_task():
         return jsonify("Task added")
     except Exception as error:
         return jsonify("error")
+
+@api.route('/tasks/<int:id>', methods=['PUT'])
+@jwt_required()
+def edit_task(id):
+    body = request.json
+
+    title = body.get('title', None)
+    description = body.get('description', None)
+    task = Task()
+    task_exists = task.query.filter(Task.user_id == int(get_jwt_identity()), Task.id == id).one_or_none()
+    print(task_exists)
+
+    task.title = body.get('title', None)
+    task.description = description
+    try:
+        db.session.commit()
+        return jsonify()
+    except Exception as error:
+        return False
