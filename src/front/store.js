@@ -32,6 +32,27 @@ export default function storeReducer(store, action = {}) {
         ...store,
         todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
       };
+
+    case 'sign_up': 
+      const user = action.payload
+      console.log(user)
+
+
+        // try {
+        // fetch(`https://zany-xylophone-r4r9rg4w447g2p9qv-3001.app.github.dev/api/sign-up`,
+        // {
+        //   method: 'POST',
+        //   headers: {
+        //     "Content-Type": "application/json"
+        //   },
+        //   body: JSON.stringify(user)
+        // }).then((response) => console.log(response.json()))
+        // console.log(data)
+        // } catch (error) {
+        //     return error
+        // }
+
+    
     default:
       throw Error('Unknown action.');
   }    
