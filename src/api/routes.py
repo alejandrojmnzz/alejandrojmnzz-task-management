@@ -93,3 +93,12 @@ def add_task():
         return jsonify("Task added")
     except Exception as error:
         return jsonify("error")
+
+@api.route('/tasks', methods=['GET'])
+@jwt_required()
+def get_task():
+    task = Task()
+    tasks = Task.query.filter_by(user_id = int(get_jwt_identity())).all()
+
+
+    return jsonify(list(map(lambda element: element.serialize(), tasks)))

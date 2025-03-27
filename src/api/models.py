@@ -40,3 +40,13 @@ class Task(db.Model):
 
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     user: Mapped["User"] = relationship(back_populates="task")
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "completed": self.completed,
+            "user_id": self.user_id,
+            "user": self.user.serialize()
+        }

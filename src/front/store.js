@@ -13,7 +13,8 @@ export const initialStore=()=>{
         background: null,
       }
     ],
-    token: localStorage.getItem("token") || null
+    token: localStorage.getItem("token") || null,
+    tasks: []
   }
 }
 
