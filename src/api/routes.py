@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, Task
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from base64 import b64encode
@@ -18,6 +18,7 @@ CORS(api)
 
 @api.route('/sign-up', methods=['POST'])
 def sign_up():
+    print("hi")
     body = request.json
     name = body.get("name", None)
     email = body.get("email", None)
@@ -46,7 +47,7 @@ def sign_up():
                 print(error.args)
                 return jsonify('Error'), 500
 
-@api.route('/sign-in', methods=['POST'])
+@api.route('/log-in', methods=['POST'])
 def sign_in():
     body = request.json
     email = body.get('email', None)
@@ -70,4 +71,25 @@ def sign_in():
         except Exception as error:
             print(error.args)
             return jsonify('Error'), 500
+        
+@api.route('/tasks', methods=['POST'])
+@jwt_required()
+def add_task():
+    body = request.json
 
+    task = Task()
+
+    task.title = body.get('title', None)
+    task.description = body.get('description', None)
+    task.user_id = int(get_jwt_identity())
+    task.completed = False
+    
+    if body['title'] is None or body['description'] is None:
+        return jsonify("Title and description are required")
+    
+    db.session.add(task)
+    try:
+        db.session.commit()
+        return jsonify("Task added")
+    except Exception as error:
+        return jsonify("error")
