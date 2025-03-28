@@ -18,7 +18,6 @@ CORS(api)
 
 @api.route('/sign-up', methods=['POST'])
 def sign_up():
-    print("hi")
     body = request.json
     name = body.get("name", None)
     email = body.get("email", None)
@@ -117,10 +116,25 @@ def edit_task(id):
         return jsonify(error.args)
 @api.route('/tasks', methods=['GET'])
 @jwt_required()
-def get_task():
+def get_tasks():
     task = Task()
     tasks = Task.query.filter_by(user_id = int(get_jwt_identity())).all()
 
+    tasks_list = list(map(lambda element: element.serialize(), tasks))
+    return jsonify(sorted(tasks_list, key=lambda x: x["id"], reverse=True))
 
-    return jsonify(list(map(lambda element: element.serialize(), tasks)))
+@api.route('/tasks-status/<int:id>', methods=['PUT'])
+@jwt_required()
+def update_task_status(id):
 
+    task = Task.query.filter(Task.user_id == int(get_jwt_identity()), Task.id == id).one_or_none()
+    print(task.serialize())
+    if task.completed == False:
+        task.completed = True
+    else:
+        task.completed = False
+    try:
+        db.session.commit()
+        return jsonify("Updated")
+    except Exception as error:
+        return jsonify(error.args)

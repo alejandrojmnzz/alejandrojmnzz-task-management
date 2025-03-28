@@ -25,7 +25,7 @@ export function EditTask() {
 
     async function handleSubmit(event) {
         event.preventDefault()
-        console.log(store.token)
+
         try {
             let response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${id}`,
                 {
