@@ -11,7 +11,11 @@ export function EditTask() {
         description: ""
     })
 
-    const [edit, setEdit] = useState()
+    const [alert, setAlert] = useState({
+        'show': false,
+        'success': true,
+        'message': ""
+    })
     const { id } = useParams()
     const navigate = useNavigate()
 
@@ -26,6 +30,24 @@ export function EditTask() {
     async function handleSubmit(event) {
         event.preventDefault()
 
+        if (task.title.trim() == "" || task.description.trim() == "") {
+            setAlert({
+                ['show']: true,
+                ['success']: false,
+                ['message']: "Title and description are required"
+            })
+            return
+        }
+        if (task.title.split("").length > 60) {
+            setAlert({
+                ['show']: true,
+                ['success']: false,
+                ['message']: "Title's max of characters is 60"
+            })
+            return
+        }
+        
+
         try {
             let response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${id}`,
                 {
@@ -38,13 +60,28 @@ export function EditTask() {
                 }
             )
             if (response.ok) {
-                alert("Task edited")
-                navigate('/')
+                setAlert({
+                    ['show']: true,
+                    ['success']: true,
+                })
+                setTimeout(() => {
+                    navigate('/')
+                  }, "1000");
             }
             else {
-                alert("Error")
+                setAlert({
+                    ['show']: true,
+                    ['success']: false,
+                    ['message']: "An error has ocurred"
+                })
             }
+
         } catch (error) {
+            setAlert({
+                ['show']: true,
+                ['success']: false,
+                ['message']: "An error has ocurred"
+            })
             return error
         }
     }
@@ -96,6 +133,19 @@ export function EditTask() {
                 <textarea name="description" className="form-control w-100 auto-size" value={task.description} onChange={handleChange} />
 
                 <button type="submit" className="btn btn-primary">Edit Task</button>
+
+                {
+                    alert.show &&
+                    alert.success ?
+                        <div className="alert alert-success mt-2" role="alert">
+                            Task edited!
+                        </div>
+                        :
+                    alert.show &&
+                        <div className="alert alert-danger mt-2" role="alert">
+                            {alert.message}
+                        </div>
+                }
 
             </form>
         </div>

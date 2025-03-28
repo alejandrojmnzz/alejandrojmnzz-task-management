@@ -24,12 +24,12 @@ def sign_up():
     password = body.get("password", None)
 
     if name is None or name.strip() == "" or email is None or email.strip() == "" or password is None or password.strip() == "":
-        return jsonify("All credentials are required")
+        return jsonify("All credentials are required"), 400
     else: 
         user = User()
         user_exists = user.query.filter_by(email = email).one_or_none()
         if user_exists is not None:
-            return jsonify("User already exists")
+            return jsonify("User already exists"), 400
         else:
             salt = b64encode(os.urandom(32)).decode('utf-8')
             hashed_password = generate_password_hash(f'{password}{salt}')
@@ -41,7 +41,7 @@ def sign_up():
             db.session.add(user)
             try:
                 db.session.commit()
-                return jsonify('User created'), 201
+                return jsonify('User created'), 200
             except Exception as error:
                 print(error.args)
                 return jsonify('Error'), 500
@@ -85,14 +85,14 @@ def add_task():
     task.completed = False
     
     if body['title'] is None or body['description'] is None:
-        return jsonify("Title and description are required")
+        return jsonify("Title and description are required"), 400
     
     db.session.add(task)
     try:
         db.session.commit()
-        return jsonify("Task added")
+        return jsonify("Task added"), 200
     except Exception as error:
-        return jsonify("error")
+        return jsonify("error"), 500
 
 @api.route('/tasks/<int:id>', methods=['PUT'])
 @jwt_required()
