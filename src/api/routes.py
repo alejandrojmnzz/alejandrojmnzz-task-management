@@ -72,6 +72,7 @@ def sign_in():
             print(error.args)
             return jsonify('Error'), 500
         
+
 @api.route('/tasks', methods=['POST'])
 @jwt_required()
 def add_task():
@@ -122,3 +123,4 @@ def get_task():
 
 
     return jsonify(list(map(lambda element: element.serialize(), tasks)))
+

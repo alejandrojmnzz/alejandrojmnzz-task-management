@@ -1,5 +1,6 @@
 body {
     background-color: rgb(20, 17, 17);
+
 }
 
 .auto-size {
@@ -10,4 +11,3 @@ body {
     background-color: white;
     width: 120vh;
     border: 1px solid black;
-}

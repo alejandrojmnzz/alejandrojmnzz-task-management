@@ -20,6 +20,7 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     salt: Mapped[str] = mapped_column(nullable=False)
+
     task: Mapped["Task"] = relationship(back_populates="user")
 
 
@@ -50,3 +51,4 @@ class Task(db.Model):
             "user_id": self.user_id,
             "user": self.user.serialize()
         }
+
