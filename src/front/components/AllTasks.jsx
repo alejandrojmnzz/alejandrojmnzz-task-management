@@ -26,6 +26,24 @@ export function AllTask() {
         }
     }
 
+    async function updateTaskStatus(id) {
+        try {
+            let response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks-status/${id}`,
+            {
+                method: 'PUT',
+                headers: {
+                    "Authorization": `Bearer ${store.token}`
+                }
+            }
+            )
+            getTasks()
+        } catch (error) {
+            
+        }
+    }
+
+    
+
     useEffect(() => {
         getTasks()
     }, [])
@@ -37,9 +55,13 @@ export function AllTask() {
 
                 store.tasks.map((task) => {
                     return (
-                        <div className="task-list">
-                            <h3>{task.title}</h3>
-                            <p>{task.description}</p>
+                        <div className="task-list d-flex justify-content-between">
+                            <div>
+                                <h3>{task.title}</h3>
+                                <p>{task.description}</p>
+                            </div>
+                            <button className="btn btn-success" onClick={() => updateTaskStatus(task.id)}>{task.completed ? "Completed" : "To do"}</button>
+                            <button className="btn btn-danger" onClick={() => deleteTask(task.id)}>Delete</button>
                         </div>
                     )
                 })
