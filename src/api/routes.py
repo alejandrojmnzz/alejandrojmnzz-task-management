@@ -71,6 +71,7 @@ def sign_in():
             print(error.args)
             return jsonify('Error'), 500
         
+
 @api.route('/tasks', methods=['POST'])
 @jwt_required()
 def add_task():
