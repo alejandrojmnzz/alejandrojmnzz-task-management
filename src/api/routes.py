@@ -138,3 +138,19 @@ def update_task_status(id):
         return jsonify("Updated")
     except Exception as error:
         return jsonify(error.args)
+
+@api.route('/tasks/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_task(id):
+    task = Task.query.filter(Task.user_id == int(get_jwt_identity()), Task.id == id).one_or_none()
+
+    if task is None:
+        return jsonify("Task does not exist")
+    
+    db.session.delete(task)
+    try:
+        db.session.commit()
+        return jsonify("Deleted")
+    except Exception as error:
+        return jsonify(error.args)
+

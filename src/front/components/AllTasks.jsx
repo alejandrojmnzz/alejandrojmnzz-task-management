@@ -2,12 +2,12 @@ import React from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { useState } from "react";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export function AllTask() {
 
     const { store, dispatch } = useGlobalReducer()
 
-    const [tasks, setTasks] = useState([])
     async function getTasks() {
         try {
             let response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`,
@@ -19,7 +19,6 @@ export function AllTask() {
                 }
             )
             let data = await response.json()
-            setTasks( data )
             dispatch({type: 'get_tasks', payload: data})
         } catch (error) {
 
@@ -42,7 +41,21 @@ export function AllTask() {
         }
     }
 
-    
+    async function deleteTask(id) {
+        try {
+            let response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${id}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    "Authorization": `Bearer ${store.token}`
+                }
+            }
+            )
+            getTasks()
+        } catch (error) {
+            
+        }
+    }
 
     useEffect(() => {
         getTasks()
@@ -57,7 +70,7 @@ export function AllTask() {
                     return (
                         <div className="task-list d-flex justify-content-between">
                             <div>
-                                <h3>{task.title}</h3>
+                                <Link to={`/task/${task.id}`}>{task.title}</Link>
                                 <p>{task.description}</p>
                             </div>
                             <button className="btn btn-success" onClick={() => updateTaskStatus(task.id)}>{task.completed ? "Completed" : "To do"}</button>

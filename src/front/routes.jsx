@@ -13,6 +13,7 @@ import SignUp from "./pages/SignUp";
 import LogIn from "./pages/LogIn";
 import { AddTask } from "./pages/AddTask";
 import { EditTask } from "./pages/EditTask";
+import { Task } from "./pages/Task";
 
 
 export const router = createBrowserRouter(
@@ -34,7 +35,8 @@ export const router = createBrowserRouter(
         <Route path="/log-in" element={<LogIn/>} />
         <Route path="/add-task" element={<AddTask/>}/>
         <Route path="/edit-task/:id" element={<EditTask/>}/>
-
+        <Route path="/task/:id" element={<Task/>}/>
+        
 
       </Route>
     )

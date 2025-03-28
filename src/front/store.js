@@ -55,6 +55,13 @@ export default function storeReducer(store, action = {}) {
         ...store,
         tasks: tasks
       }
+    
+      case 'log_out':
+        localStorage.removeItem("token")
+        return {
+          ...store,
+          token: null
+        }
 
         // try {
         // fetch(`https://zany-xylophone-r4r9rg4w447g2p9qv-3001.app.github.dev/api/sign-up`,
