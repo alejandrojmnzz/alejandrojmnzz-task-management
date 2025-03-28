@@ -41,8 +41,10 @@ function LogIn() {
             
 
             alert('Logged')
+
             navigate('/')
-        }
+            
+        } 
         else {
             alert('Error')
         }
