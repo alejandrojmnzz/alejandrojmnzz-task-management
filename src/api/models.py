@@ -20,7 +20,8 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     salt: Mapped[str] = mapped_column(nullable=False)
-    task: Mapped[List] = relationship(back_populates="user")
+
+    task: Mapped["Task"] = relationship(back_populates="user")
 
 
     def serialize(self):
@@ -37,4 +38,17 @@ class Task(db.Model):
     description: Mapped[str] = mapped_column(String(255), nullable=False)
     completed: Mapped[bool] = mapped_column(Boolean(), nullable=False)
 
+
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    user: Mapped["User"] = relationship(back_populates="task")
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "completed": self.completed,
+            "user_id": self.user_id,
+            "user": self.user.serialize()
+        }
+

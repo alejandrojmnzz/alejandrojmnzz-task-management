@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, Task
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from base64 import b64encode
@@ -72,5 +72,55 @@ def sign_in():
             print(error.args)
             return jsonify('Error'), 500
         
-# @api.route('/tasks', methods=['POST'])
-# def add_task():
+
+@api.route('/tasks', methods=['POST'])
+@jwt_required()
+def add_task():
+    body = request.json
+
+    task = Task()
+
+    task.title = body.get('title', None)
+    task.description = body.get('description', None)
+    task.user_id = int(get_jwt_identity())
+    task.completed = False
+    
+    if body['title'] is None or body['description'] is None:
+        return jsonify("Title and description are required")
+    
+    db.session.add(task)
+    try:
+        db.session.commit()
+        return jsonify("Task added")
+    except Exception as error:
+        return jsonify("error")
+
+@api.route('/tasks/<int:id>', methods=['PUT'])
+@jwt_required()
+def edit_task(id):
+    body = request.json
+
+    title = body.get('title', None)
+    description = body.get('description', None)
+
+    task = Task.query.filter(Task.user_id == int(get_jwt_identity()), Task.id == id).one_or_none()
+
+    if task is None:
+        return jsonify('Task does not exist')
+    task.title = title
+    task.description = description
+
+    try:
+        db.session.commit()
+        return jsonify("Edited")
+    except Exception as error:
+        return jsonify(error.args)
+@api.route('/tasks', methods=['GET'])
+@jwt_required()
+def get_task():
+    task = Task()
+    tasks = Task.query.filter_by(user_id = int(get_jwt_identity())).all()
+
+
+    return jsonify(list(map(lambda element: element.serialize(), tasks)))
+

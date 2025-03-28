@@ -12,7 +12,9 @@ export const initialStore=()=>{
         title: "Do my homework",
         background: null,
       }
-    ]
+    ],
+    token: localStorage.getItem("token") || null,
+    tasks: []
   }
 }
 
@@ -33,10 +35,26 @@ export default function storeReducer(store, action = {}) {
         todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
       };
 
+
+    case 'add_token':
+      const token = action.payload
+      localStorage.setItem("token", token)
+
+      return {
+        ...store,
+        token: token
+      }
+
     case 'sign_up': 
       const user = action.payload
       console.log(user)
 
+    case 'get_tasks':
+      const tasks = action.payload
+      return {
+        ...store,
+        tasks: tasks
+      }
 
         // try {
         // fetch(`https://zany-xylophone-r4r9rg4w447g2p9qv-3001.app.github.dev/api/sign-up`,

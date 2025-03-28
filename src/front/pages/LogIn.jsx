@@ -34,8 +34,12 @@ function LogIn() {
           body: JSON.stringify(user)
         })
 
+        let data = await response.json()
 
         if (response.ok) {
+            dispatch({type: "add_token", payload: data["token"]})
+            
+
             alert('Logged')
             navigate('/')
         }
