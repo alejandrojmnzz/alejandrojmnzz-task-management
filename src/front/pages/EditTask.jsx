@@ -5,14 +5,14 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export function EditTask() {
-    const {store, dispatch} = useGlobalReducer()
+    const { store, dispatch } = useGlobalReducer()
     const [task, setTask] = useState({
         title: "",
         description: ""
     })
 
     const [edit, setEdit] = useState()
-    const {id} = useParams()
+    const { id } = useParams()
     const navigate = useNavigate()
 
     function handleChange({ target }) {
@@ -60,8 +60,8 @@ export function EditTask() {
                 }
             )
             let data = await response.json()
-            dispatch({type: 'get_tasks', payload: data})
-            
+            dispatch({ type: 'get_tasks', payload: data })
+
 
         } catch (error) {
 
@@ -69,12 +69,12 @@ export function EditTask() {
     }
     function getTask() {
         if (store.tasks.length != 0) {
-        let taskToEdit = store.tasks.filter((item) => item.id == id)
-        setTask({
-            ["title"]: taskToEdit[0].title,
-            ["description"]: taskToEdit[0].description
-        })
-    }
+            let taskToEdit = store.tasks.filter((item) => item.id == id)
+            setTask({
+                ["title"]: taskToEdit[0].title,
+                ["description"]: taskToEdit[0].description
+            })
+        }
     }
     useEffect(() => {
         getTasks()
