@@ -6,7 +6,7 @@ export const Navbar = () => {
 	const { store, dispatch } = useGlobalReducer()
 
 	return (
-		<nav className="navbar navbar-light bg-light">
+		<nav className="navbar navbar-light bg-dark">
 			<div className="container">
 				<Link to="/">
 					<button className="btn btn-secondary">Home</button>
@@ -15,7 +15,7 @@ export const Navbar = () => {
 					{
 						store.token ?
 							<>
-
+								<Link to='/add-task' className="btn add-button-color me-2">Add Task</Link>
 								<Link to='/' className="btn btn-danger" onClick={() => dispatch({ type: 'log_out' })}>Log Out</Link>
 
 
@@ -23,7 +23,7 @@ export const Navbar = () => {
 							:
 							<>
 								<Link to="/log-in">
-									<button className="btn btn-primary">Log In</button>
+									<button className="btn btn-primary me-2">Log In</button>
 								</Link>
 								<Link to="/sign-up">
 									<button className="btn btn-primary">Sign Up</button>

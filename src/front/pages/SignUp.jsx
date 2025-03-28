@@ -4,8 +4,13 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 import { useNavigate } from "react-router-dom";
 
 function SignUp() {
-    const {store, dispatch} = useGlobalReducer()
+    const { store, dispatch } = useGlobalReducer()
     const navigate = useNavigate()
+    const [alert, setAlert] = useState({
+        'show': false,
+        'success': true,
+        'message': ""
+    })
 
     const [user, setUser] = useState({
         name: "",
@@ -13,46 +18,64 @@ function SignUp() {
         password: ""
     })
 
-    function handleChange({target}) {
+    function handleChange({ target }) {
         setUser({
             ...user,
             [target.name]: target.value
         })
-        console.log(user)
     }
 
     async function handleSubmit(event) {
         event.preventDefault()
-        // const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-
-        // const response = await fetch(backendUrl + "/sign-up")
-        // const data = await response.json()
-        // try {
-        //     // dispatch({type: 'sign_up', payload: user})
-            
-        // } catch (error) {
-        //     console.log(error)
-        // }
-
+        if (user.name.trim() == "" || user.email.trim() == "" || user.password.trim() == "") {
+            setAlert({
+                ['show']: true,
+                ['success']: false,
+                ['message']: "All credentials are required"
+            })
+            return
+        }
+        if (user.name.split("").length > 120) {
+            setAlert({
+                ['show']: true,
+                ['success']: false,
+                ['message']: "Name's max of characters is 120"
+            })
+            return
+        }
+        if (user.email.split("").length > 120) {
+            setAlert({
+                ['show']: true,
+                ['success']: false,
+                ['message']: "Email's max of characters is 120"
+            })
+            return
+        }
         try {
-        let response = await fetch(`https://zany-xylophone-r4r9rg4w447g2p9qv-3001.app.github.dev/api/sign-up`,
-        {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(user)
-        })
+            let response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sign-up`,
+                {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(user)
+                })
 
+            let data = await response.json()
+            if (response.ok) {
+                setAlert({
+                    ['show']: true,
+                    ['success']: true
+                })
+                setTimeout(() => {
+                    navigate('/log-in')
+                  }, "1000");
 
-        if (response.ok) {
-            alert('Created')
-            navigate('/')
-        }
-        else {
-            alert('Error')
-        }
+            }
+            else {
+                alert('Error')
+            }
         } catch (error) {
             return error
         }
@@ -62,15 +85,28 @@ function SignUp() {
         <div className="container d-flex justify-content-center">
             <form className="w-50" onSubmit={handleSubmit}>
                 <label htmlFor="name" className="form-label" >Name</label>
-                <input name="name" className="form-control bg-secondary" onChange={handleChange} value={user.name}/>
+                <input name="name" className="form-control" onChange={handleChange} value={user.name} />
 
-                <label htmlFor="email" className="form-label bg-secondary" >Email</label>
-                <input name="email" className="form-control" onChange={handleChange} value={user.email}/>
+                <label htmlFor="email" className="form-label" >Email</label>
+                <input type="email" name="email" className="form-control" onChange={handleChange} value={user.email} />
 
-                <label htmlFor="password" className="form-label bg-secondary">Password</label>
+                <label htmlFor="password" className="form-label">Password</label>
                 <input name="password" className="form-control" onChange={handleChange} value={user.password} />
 
                 <button type="submit" className="btn btn-primary" >Submit</button>
+
+                {
+                    alert.show &&
+                    alert.success ?
+                        <div className="alert alert-success mt-2" role="alert">
+                            Registered!
+                        </div>
+                        :
+                    alert.show &&
+                        <div className="alert alert-danger mt-2" role="alert">
+                            {alert.message}
+                        </div>
+                }
             </form>
         </div>
     )

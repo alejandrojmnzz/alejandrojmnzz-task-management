@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(20, 17, 17);
+    background-color: rgb(136, 136, 136);
 
 }
 
@@ -8,6 +8,44 @@ body {
 }
 
 .task-list {
-    background-color: white;
+    background-color: rgb(210, 210, 210);
+    background: linear-gradient(to right, rgb(205, 205, 205), rgb(144, 144, 144));
+    border-radius: 10px;
     width: 120vh;
-    border: 1px solid black;
+    -webkit-box-shadow: 10px 10px 28px -3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 28px -3px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 28px -3px rgba(0,0,0,0.75);
+    margin-top: 10px;
+}
+
+.task-title {
+    color: rgb(37, 37, 37);
+    font-size: 22px;
+    text-decoration: none;
+}
+
+.task-buttons {
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    margin-left: 10px;
+}
+
+.task-status {
+    min-width: 55px;
+    max-width: 55px;
+
+}
+
+.status-text {
+    font-size: 18px;
+    color: rgb(104, 104, 104);
+}
+
+.task-description {
+    color: rgb(74, 74, 74);
+}
+
+.add-button-color {
+    background-color: rgb(204, 182, 182);
+}

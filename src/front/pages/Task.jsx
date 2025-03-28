@@ -65,13 +65,17 @@ export function Task() {
             <div className="d-flex justify-content-center">
                 {
                     task &&
-                    <div>
+                    <div className="bg-secondary p-3 rounded">
                         <h1>{task.title}</h1>
-                        <p>{task.description}</p>
-                        <div className="d-flex justify-content-end">
-                            <h3>{task.user.name}</h3>
-                            <button className="btn btn-success" onClick={() => updateTaskStatus(task.id)}>{task.completed ? "Completed" : "To do"}</button>
-                            <Link className="btn btn-primary" to={(`/edit-task/${task.id}`)}>Edit</Link>
+                        <p className="mt-5">{task.description}</p>
+                        <div className="d-flex justify-content-between mt-3">
+                            <div>
+                                <h3>{task.user.name}</h3>
+                            </div>
+                            <div>
+                                <button className="btn btn-success me-2" onClick={() => updateTaskStatus(task.id)}>{task.completed ? "Completed" : "To do"}</button>
+                                <Link className="btn btn-primary" to={(`/edit-task/${task.id}`)}>Edit</Link>
+                            </div>
                         </div>
 
                     </div>
