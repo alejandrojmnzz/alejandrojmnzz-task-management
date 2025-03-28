@@ -19,6 +19,7 @@ export function AllTask() {
                 }
             )
             let data = await response.json()
+            console.log(data)
             dispatch({type: 'get_tasks', payload: data})
         } catch (error) {
 
@@ -58,14 +59,16 @@ export function AllTask() {
     }
 
     useEffect(() => {
-        getTasks()
+        if (store.token) {
+            getTasks()
+        }
     }, [])
     return (
         <div className="container d-flex flex-column align-items-center">
             <h1>Your Tasks</h1>
 
             {
-
+                store.token ?
                 store.tasks.map((task) => {
                     return (
                         <div className="task-list d-flex justify-content-between">
@@ -74,10 +77,15 @@ export function AllTask() {
                                 <p>{task.description}</p>
                             </div>
                             <button className="btn btn-success" onClick={() => updateTaskStatus(task.id)}>{task.completed ? "Completed" : "To do"}</button>
+                            <Link className="btn btn-primary" to={(`/edit-task/${task.id}`)}>Edit</Link>
                             <button className="btn btn-danger" onClick={() => deleteTask(task.id)}>Delete</button>
                         </div>
                     )
                 })
+                :
+                <div className="d-flex justify-content-center">
+                    <p>You must log in to see your tasks!</p>
+                </div>
             }
         </div>
     )

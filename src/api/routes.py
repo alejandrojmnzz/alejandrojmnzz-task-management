@@ -117,11 +117,14 @@ def edit_task(id):
 @api.route('/tasks', methods=['GET'])
 @jwt_required()
 def get_tasks():
-    task = Task()
-    tasks = Task.query.filter_by(user_id = int(get_jwt_identity())).all()
+    try:
+        tasks = Task.query.filter_by(user_id = int(get_jwt_identity())).all()
 
-    tasks_list = list(map(lambda element: element.serialize(), tasks))
-    return jsonify(sorted(tasks_list, key=lambda x: x["id"], reverse=True))
+        tasks_list = list(map(lambda element: element.serialize(), tasks))
+        return jsonify(sorted(tasks_list, key=lambda x: x["id"], reverse=True))
+    except Exception as error:
+        print(error.args)
+        return jsonify(error.args)
 
 @api.route('/tasks-status/<int:id>', methods=['PUT'])
 @jwt_required()
