@@ -12,6 +12,7 @@ import { Demo } from "./pages/Demo";
 import SignUp from "./pages/SignUp";
 import LogIn from "./pages/LogIn";
 import { AddTask } from "./pages/AddTask";
+import { EditTask } from "./pages/EditTask";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -31,6 +32,7 @@ export const router = createBrowserRouter(
         <Route path="/sign-up" element={<SignUp/>} />
         <Route path="/log-in" element={<LogIn/>} />
         <Route path="/add-task" element={<AddTask/>}/>
+        <Route path="/edit-task/:id" element={<EditTask/>}/>
 
       </Route>
     )

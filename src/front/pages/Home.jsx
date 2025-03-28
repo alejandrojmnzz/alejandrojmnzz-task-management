@@ -29,8 +29,9 @@ export const Home = () => {
 
 	// }
 
+
 	useEffect(() => {
-		// loadMessage()
+
 	}, [])
 
 	return (

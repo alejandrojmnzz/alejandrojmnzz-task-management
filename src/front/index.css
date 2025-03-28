@@ -5,3 +5,9 @@ body {
 .auto-size {
     field-sizing:content;
 }
+
+.task-list {
+    background-color: white;
+    width: 120vh;
+    border: 1px solid black;
+}

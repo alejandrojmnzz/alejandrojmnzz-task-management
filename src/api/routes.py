@@ -101,14 +101,24 @@ def edit_task(id):
 
     title = body.get('title', None)
     description = body.get('description', None)
-    task = Task()
-    task_exists = task.query.filter(Task.user_id == int(get_jwt_identity()), Task.id == id).one_or_none()
-    print(task_exists)
 
-    task.title = body.get('title', None)
+    task = Task.query.filter(Task.user_id == int(get_jwt_identity()), Task.id == id).one_or_none()
+
+    if task is None:
+        return jsonify('Task does not exist')
+    task.title = title
     task.description = description
+
     try:
         db.session.commit()
-        return jsonify()
+        return jsonify("Edited")
     except Exception as error:
-        return False
+        return jsonify(error.args)
+@api.route('/tasks', methods=['GET'])
+@jwt_required()
+def get_task():
+    task = Task()
+    tasks = Task.query.filter_by(user_id = int(get_jwt_identity())).all()
+
+
+    return jsonify(list(map(lambda element: element.serialize(), tasks)))

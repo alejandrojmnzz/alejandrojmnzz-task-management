@@ -13,7 +13,8 @@ export const initialStore=()=>{
         background: null,
       }
     ],
-    token: localStorage.getItem("token") || null
+    token: localStorage.getItem("token") || null,
+    tasks: []
   }
 }
 
@@ -46,7 +47,12 @@ export default function storeReducer(store, action = {}) {
       const user = action.payload
       console.log(user)
 
-
+    case 'get_tasks':
+      const tasks = action.payload
+      return {
+        ...store,
+        tasks: tasks
+      }
         // try {
         // fetch(`https://zany-xylophone-r4r9rg4w447g2p9qv-3001.app.github.dev/api/sign-up`,
         // {
